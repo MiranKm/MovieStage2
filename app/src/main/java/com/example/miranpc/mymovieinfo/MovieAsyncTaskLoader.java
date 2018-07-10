@@ -28,7 +28,7 @@ public class MovieAsyncTaskLoader extends AsyncTaskLoader<List<MovieModel>> {
     public final static String MAIN_LINK = "http://api.themoviedb.org/3/movie/";
     public final static String API_KEY = "";   // Todo add your api key here
     public final static String LANG = "en-US";
-    
+
     String movieCat;
 
     public MovieAsyncTaskLoader(Context context, String movieCat) {
