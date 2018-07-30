@@ -1,6 +1,5 @@
 package com.example.miranpc.mymovieinfo;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -18,14 +17,16 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.miranpc.mymovieinfo.model.MovieModel;
+import com.example.miranpc.mymovieinfo.Adapters.MoviesRecyclerAdapter;
+import com.example.miranpc.mymovieinfo.AsyncTasks.MovieAsyncTaskLoader;
+import com.example.miranpc.mymovieinfo.DataBase.MoviesEntity;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<MovieModel>>, MoviesRecyclerAdapter.onClickListener {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<MoviesEntity>>, MoviesRecyclerAdapter.onClickListener {
 
     private static final String TAG = "MainActivity";
 
@@ -33,15 +34,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static String movie = "popular";
 
 
+    android.support.v7.widget.Toolbar toolbar;
     private RecyclerView recyclerView;
     MoviesRecyclerAdapter moviesRecyclerAdapter;
     TextView internetTV;
+    ProgressBar loadingPb;
 
 
-    public boolean fun() {
-
+    public boolean checkInternetConn() {
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
@@ -53,21 +54,30 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        int or= getResources().getConfiguration().orientation;
+
+
+
 
         recyclerView = findViewById(R.id.recycler_view);
         internetTV = findViewById(R.id.internet_text);
+        loadingPb = findViewById(R.id.pb);
 
+        loadingPb.setVisibility(View.VISIBLE);
         setUpRecyclerAdapter();
 
-        recyclerView.setAdapter(moviesRecyclerAdapter);
 
-
-        if (fun()) {
+        if (checkInternetConn()) {
             internetTV.setVisibility(View.GONE);
             LoaderManager loaderManager = getSupportLoaderManager();
             loaderManager.initLoader(0, null, this).forceLoad();
-        } else
+        } else {
             internetTV.setVisibility(View.VISIBLE);
+            loadingPb.setVisibility(View.GONE);
+        }
 
 
     }
@@ -84,25 +94,59 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         LoaderManager loaderManager = getSupportLoaderManager();
 
+
         switch (item.getItemId()) {
             case R.id.popular:
-
-                if (fun()) {
+                if (checkInternetConn()) {
                     internetTV.setVisibility(View.GONE);
                     moviesRecyclerAdapter.clearListOfMovies();
                     movie = "popular";
                     loaderManager.restartLoader(0, null, this).forceLoad();
                 } else internetTV.setVisibility(View.VISIBLE);
-
                 break;
+
             case R.id.top_rated:
-                if (fun()) {
+                if (checkInternetConn()) {
                     internetTV.setVisibility(View.GONE);
                     moviesRecyclerAdapter.clearListOfMovies();
                     movie = "top_rated";
                     loaderManager.restartLoader(0, null, this).forceLoad();
 
                 } else internetTV.setVisibility(View.VISIBLE);
+
+                break;
+            case R.id.now_playing:
+                if (checkInternetConn()) {
+                    internetTV.setVisibility(View.GONE);
+                    moviesRecyclerAdapter.clearListOfMovies();
+                    movie = "now_playing";
+                    loaderManager.restartLoader(0, null, this).forceLoad();
+
+                } else internetTV.setVisibility(View.VISIBLE);
+
+                break;
+            case R.id.latest:
+                if (checkInternetConn()) {
+                    internetTV.setVisibility(View.GONE);
+                    moviesRecyclerAdapter.clearListOfMovies();
+                    movie = "latest";
+                    loaderManager.restartLoader(0, null, this).forceLoad();
+
+                } else internetTV.setVisibility(View.VISIBLE);
+
+                break;
+            case R.id.upcoming:
+                if (checkInternetConn()) {
+                    internetTV.setVisibility(View.GONE);
+                    moviesRecyclerAdapter.clearListOfMovies();
+                    movie = "upcoming";
+                    loaderManager.restartLoader(0, null, this).forceLoad();
+                } else internetTV.setVisibility(View.VISIBLE);
+
+                break;
+            case R.id.fav:
+                startActivity(new Intent(this, FavouriteMoviesActivity.class));
+                overridePendingTransition(R.anim.slide_right,R.anim.slide_out_left);
 
                 break;
         }
@@ -115,38 +159,45 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         moviesRecyclerAdapter = new MoviesRecyclerAdapter(this, this);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(gridLayoutManager);
+        recyclerView.setAdapter(moviesRecyclerAdapter);
+
 
     }
 
 
     @NonNull
     @Override
-    public Loader<List<MovieModel>> onCreateLoader(int id, @Nullable Bundle args) {
+    public Loader<List<MoviesEntity>> onCreateLoader(int id, @Nullable Bundle args) {
         Log.d(TAG, "onCreateLoader: started ");
+        loadingPb.setVisibility(View.VISIBLE);
         return new MovieAsyncTaskLoader(this, movie);
     }
 
     @Override
-    public void onLoadFinished(@NonNull Loader<List<MovieModel>> loader, List<MovieModel> data) {
+    public void onLoadFinished(@NonNull Loader<List<MoviesEntity>> loader, List<MoviesEntity> data) {
         moviesRecyclerAdapter.addMovies(data);
         recyclerView.setAdapter(moviesRecyclerAdapter);
+        loadingPb.setVisibility(View.GONE);
+
         Log.d(TAG, "onLoadFinished: load finished");
-        Toast.makeText(this, "load finished", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<List<MovieModel>> loader) {
 
     }
 
     @Override
-    public void onItemClickListener(MovieModel movieModel) {
+    public void onLoaderReset(@NonNull Loader<List<MoviesEntity>> loader) {
+
+    }
+
+    @Override
+    public void onItemClickListener(MoviesEntity movieModel) {
         Intent intent = new Intent(this, DetailsActivity.class);
         intent.putExtra("name", movieModel.getMovieTitle());
         intent.putExtra("image", movieModel.getMovieBackDrop());
         intent.putExtra("overview", movieModel.getMovieOverView());
         intent.putExtra("rating", movieModel.getMovieRating());
         intent.putExtra("date", movieModel.getMovieYear());
+        intent.putExtra("id", movieModel.getMovieId());
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_right,R.anim.slide_out_left);
     }
 }

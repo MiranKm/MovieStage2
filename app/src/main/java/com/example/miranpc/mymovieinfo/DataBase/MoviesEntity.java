@@ -1,12 +1,30 @@
-package com.example.miranpc.mymovieinfo.model;
+package com.example.miranpc.mymovieinfo.DataBase;
 
-public class MovieModel {
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
+@Entity
+public class MoviesEntity {
+
+    @PrimaryKey
+    private int movieId;
     private String movieTitle;
     private String movieRating;
     private String movieYear;
     private String movieOverView;
     private String movieBackDrop;
     private String moviePoster;
+    public int ID;
+
+
+
+    public int getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
+    }
 
     public String getMovieTitle() {
         return movieTitle;
@@ -56,8 +74,11 @@ public class MovieModel {
         this.moviePoster = moviePoster;
     }
 
-    public MovieModel(String movieTitle, String movieRating, String movieYear, String movieOverView, String movieBackDrop, String moviePoster) {
 
+
+    public MoviesEntity(int movieId, String movieTitle, String movieRating, String movieYear, String movieOverView, String movieBackDrop, String moviePoster) {
+
+        this.movieId = movieId;
         this.movieTitle = movieTitle;
         this.movieRating = movieRating;
         this.movieYear = movieYear;
@@ -65,4 +86,6 @@ public class MovieModel {
         this.movieBackDrop = movieBackDrop;
         this.moviePoster = moviePoster;
     }
+
+
 }

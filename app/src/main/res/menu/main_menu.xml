@@ -12,4 +12,21 @@
         android:id="@+id/top_rated"
         android:title="Top Rated"
         app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/now_playing"
+        android:title="Now Playing"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/latest"
+        android:title="Latest"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/upcoming"
+        android:title="Upcoming"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/fav"
+        android:title="Favourite Movies"
+        app:showAsAction="collapseActionView" />
 </menu>

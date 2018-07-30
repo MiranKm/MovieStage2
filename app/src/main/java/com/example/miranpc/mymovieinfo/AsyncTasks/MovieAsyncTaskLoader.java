@@ -1,11 +1,12 @@
-package com.example.miranpc.mymovieinfo;
+package com.example.miranpc.mymovieinfo.AsyncTasks;
 
 import android.content.Context;
 import android.net.Uri;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
-import com.example.miranpc.mymovieinfo.model.MovieModel;
+import com.example.miranpc.mymovieinfo.ApiUtil;
+import com.example.miranpc.mymovieinfo.DataBase.MoviesEntity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,14 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class MovieAsyncTaskLoader extends AsyncTaskLoader<List<MovieModel>> {
+public class MovieAsyncTaskLoader extends AsyncTaskLoader<List<MoviesEntity>> {
 
     private static final String TAG = "MovieAsyncTaskLoader";
-
-
-    public final static String MAIN_LINK = "http://api.themoviedb.org/3/movie/";
-    public final static String API_KEY = "";   // Todo add your api key here
-    public final static String LANG = "en-US";
 
     String movieCat;
 
@@ -39,15 +35,13 @@ public class MovieAsyncTaskLoader extends AsyncTaskLoader<List<MovieModel>> {
 
 
     @Override
-    public List<MovieModel> loadInBackground() {
-
-        List<MovieModel> moviesList = null;
-
+    public List<MoviesEntity> loadInBackground() {
+        List<MoviesEntity> moviesList = null;
         try {
-
-
             URL urlR = urlMaker(movieCat);
+
             String json = fetchData(urlR);
+
 
             moviesList = parsMovieJson(json);
 
@@ -61,16 +55,17 @@ public class MovieAsyncTaskLoader extends AsyncTaskLoader<List<MovieModel>> {
     }
 
     private URL urlMaker(String... args) throws MalformedURLException {
-        Uri uri = Uri.parse(MAIN_LINK).buildUpon()
+        Uri uri = Uri.parse(ApiUtil.MAIN_LINK).buildUpon()
                 .appendPath(args[0])
-                .appendQueryParameter("api_key", API_KEY)
-                .appendQueryParameter("language", LANG)
+                .appendQueryParameter("api_key", ApiUtil.API_KEY)
+                .appendQueryParameter("language", ApiUtil.LANG)
                 .build();
 
         URL url = new URL(uri.toString());
 
         return url;
     }
+    //351286
 
 
     private String fetchData(URL url) throws IOException {
@@ -89,10 +84,10 @@ public class MovieAsyncTaskLoader extends AsyncTaskLoader<List<MovieModel>> {
     }
 
 
-    private List<MovieModel> parsMovieJson(String json) throws JSONException {
+    private List<MoviesEntity> parsMovieJson(String json) throws JSONException {
 
 
-        List<MovieModel> listOfMovies = new ArrayList<>();
+        List<MoviesEntity> listOfMovies = new ArrayList<>();
 
         JSONObject root = new JSONObject(json);
 
@@ -107,17 +102,21 @@ public class MovieAsyncTaskLoader extends AsyncTaskLoader<List<MovieModel>> {
             JSONObject detailsJsonObj = detailsJsonArr.getJSONObject(i);
 
             String movieTitle = detailsJsonObj.getString("title");
+            int movieId = detailsJsonObj.getInt("id");
             String movieBackDrop = "http://image.tmdb.org/t/p/w500/" + detailsJsonObj.getString("poster_path");
+            Log.d(TAG, "parsMovieJson: poster path " + movieBackDrop);
             String movieOverView = detailsJsonObj.getString("overview");
             String movieBackdrop = "http://image.tmdb.org/t/p/w780/" + detailsJsonObj.getString("backdrop_path");
+            Log.d(TAG, "parsMovieJson: poster path " + movieBackDrop);
             String movieRating = detailsJsonObj.getString("vote_average");
             String movieYear = detailsJsonObj.getString("release_date");
 
 
-            listOfMovies.add(new MovieModel(movieTitle, movieRating, movieYear, movieOverView, movieBackdrop, movieBackDrop));
+            listOfMovies.add(new MoviesEntity(movieId, movieTitle, movieRating, movieYear, movieOverView, movieBackdrop, movieBackDrop));
         }
 
         return listOfMovies;
     }
+
 
 }

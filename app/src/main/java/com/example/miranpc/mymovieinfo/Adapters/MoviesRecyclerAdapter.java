@@ -1,4 +1,4 @@
-package com.example.miranpc.mymovieinfo;
+package com.example.miranpc.mymovieinfo.Adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.miranpc.mymovieinfo.model.MovieModel;
+import com.example.miranpc.mymovieinfo.DataBase.MoviesEntity;
+import com.example.miranpc.mymovieinfo.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAdapter.MovieViewHolder> {
 
-    private List<MovieModel> listOfMovies;
+    private List<MoviesEntity> listOfMovies;
     private Context context;
     private onClickListener onClickListener;
 
@@ -36,11 +37,9 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
-
-        MovieModel movieModel = listOfMovies.get(position);
-
+        MoviesEntity movieModel = listOfMovies.get(position);
         holder.textView.setText(movieModel.getMovieTitle());
-        Picasso.with(context).load(movieModel.getMoviePoster()).into(holder.imageView);
+        Picasso.with(context).load(movieModel.getMoviePoster()).placeholder(R.drawable.placer_holder).into(holder.imageView);
     }
 
     @Override
@@ -52,9 +51,8 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
     }
 
     public interface onClickListener {
-        void onItemClickListener(MovieModel movieModel);
+        void onItemClickListener(MoviesEntity movieModel);
     }
-
 
 
     public void clearListOfMovies() {
@@ -69,9 +67,10 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
     }
 
 
-    public void addMovies(List<MovieModel> movies) {
+    public void addMovies(List<MoviesEntity> movies) {
         int posStart = listOfMovies.size();
-        listOfMovies.addAll(movies);
+        if (movies != null)
+            listOfMovies.addAll(movies);
         notifyItemRangeInserted(posStart, listOfMovies.size());
     }
 
@@ -89,7 +88,7 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
 
         @Override
         public void onClick(View v) {
-            MovieModel movies = listOfMovies.get(getAdapterPosition());
+            MoviesEntity movies = listOfMovies.get(getAdapterPosition());
             onClickListener.onItemClickListener(movies);
         }
     }
