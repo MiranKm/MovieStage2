@@ -24,7 +24,7 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.example.miranpc.mymovieinfo.Adapters.MovieReviewAdapter;
-import com.example.miranpc.mymovieinfo.Adapters.TrailersAdapter;
+import com.example.miranpc.mymovieinfo.Adapters.MovieTrailerAdapter;
 import com.example.miranpc.mymovieinfo.AsyncTasks.ReviewAsyncTaskLoader;
 import com.example.miranpc.mymovieinfo.AsyncTasks.VideoAsyncTaskLoader;
 import com.example.miranpc.mymovieinfo.DataBase.AppExecutors;
@@ -37,7 +37,7 @@ import com.squareup.picasso.Target;
 
 import java.util.List;
 
-public class DetailsActivity extends AppCompatActivity implements MovieReviewAdapter.onItemClick, TrailersAdapter.onItemClickListener {
+public class DetailsActivity extends AppCompatActivity implements MovieReviewAdapter.onItemClick, MovieTrailerAdapter.onItemClickListener {
 
     private static final String TAG = "DetailsActivity";
 
@@ -53,8 +53,7 @@ public class DetailsActivity extends AppCompatActivity implements MovieReviewAda
 
     MoviesEntity moviesEntity;
     MovieReviewAdapter reviewAdapter;
-    AppExecutors executer;
-    TrailersAdapter trailersAdapter;
+    MovieTrailerAdapter trailersAdapter;
 
     int movieId;
     private boolean isFavourite;
@@ -66,7 +65,6 @@ public class DetailsActivity extends AppCompatActivity implements MovieReviewAda
         setContentView(R.layout.activity_details);
 
         moviesDB = MoviesDB.getInstance(this);
-        executer = AppExecutors.getInstance();
 
         titleTv = findViewById(R.id.title);
         trailersRecyclerView = findViewById(R.id.trailers);
@@ -101,10 +99,9 @@ public class DetailsActivity extends AppCompatActivity implements MovieReviewAda
         moviesEntity = new MoviesEntity(movieId, movieTitle, movieRating, movieDate, movieOverView, null, moviePoster);
 
 
-        executer.diskIO().execute(new Runnable() {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-
                 MoviesEntity movie = moviesDB.movieDao().loadMovieById(movieId);
                 if (movie != null) {
                     isFavourite = true;
@@ -165,7 +162,7 @@ public class DetailsActivity extends AppCompatActivity implements MovieReviewAda
     public void addToFav(View view) {
 
         if (isFavourite) {
-            executer.diskIO().execute(new Runnable() {
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
                     moviesDB.movieDao().deleteMovie(moviesEntity);
@@ -175,12 +172,13 @@ public class DetailsActivity extends AppCompatActivity implements MovieReviewAda
             Toast.makeText(this, "Movie Deleted From your Favourites", Toast.LENGTH_SHORT).show();
             fab.setImageResource(R.drawable.ic_star_white_24dp);
         } else {
-            executer.diskIO().execute(new Runnable() {
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
                     moviesDB.movieDao().insertMovie(moviesEntity);
                 }
             });
+
             isFavourite = true;
             Toast.makeText(this, "Movie Added to your Favourites", Toast.LENGTH_SHORT).show();
             fab.setImageResource(R.drawable.ic_delete_black_24dp);
@@ -202,7 +200,7 @@ public class DetailsActivity extends AppCompatActivity implements MovieReviewAda
 
     private void trailersRecyclerAdapter() {
         LinearLayoutManager manager = new LinearLayoutManager(this);
-        trailersAdapter = new TrailersAdapter(DetailsActivity.this, this);
+        trailersAdapter = new MovieTrailerAdapter(DetailsActivity.this, this);
         trailersRecyclerView.setHasFixedSize(true);
         trailersRecyclerView.setLayoutManager(manager);
         trailersRecyclerView.setAdapter(trailersAdapter);

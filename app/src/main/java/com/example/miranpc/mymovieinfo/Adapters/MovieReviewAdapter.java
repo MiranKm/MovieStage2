@@ -42,15 +42,9 @@ public class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.
 
         MovieReviewModel movieReviewModelList = listOfReviews.get(position);
 
-
-        if (!movieReviewModelList.getContent().isEmpty()) {
-            holder.urlTv.setText(movieReviewModelList.getUrl());
-            holder.authorTv.setText(movieReviewModelList.getAuthor());
-            holder.contentTv.setText(movieReviewModelList.getContent());
-        } else {
-            holder.contentTv.setText("No Reviews available for this movie");
-        }
-
+        holder.urlTv.setText(movieReviewModelList.getUrl());
+        holder.authorTv.setText(movieReviewModelList.getAuthor());
+        holder.contentTv.setText(movieReviewModelList.getContent());
 
     }
 

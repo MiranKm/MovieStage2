@@ -27,6 +27,7 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
+            android:label="Favourite Movies"
             android:theme="@style/detailsTheme" android:name=".FavouriteMoviesActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

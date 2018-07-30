@@ -29,16 +29,15 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<MoviesEntity>>, MoviesRecyclerAdapter.onClickListener {
 
     private static final String TAG = "MainActivity";
-
-
     private static String movie = "popular";
 
 
     android.support.v7.widget.Toolbar toolbar;
-    private RecyclerView recyclerView;
+    RecyclerView recyclerView;
     MoviesRecyclerAdapter moviesRecyclerAdapter;
     TextView internetTV;
     ProgressBar loadingPb;
+    MoviesEntity moviesEntity;
 
 
     public boolean checkInternetConn() {
@@ -56,9 +55,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        int or= getResources().getConfiguration().orientation;
-
 
 
 
@@ -94,13 +90,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         LoaderManager loaderManager = getSupportLoaderManager();
 
-
         switch (item.getItemId()) {
             case R.id.popular:
                 if (checkInternetConn()) {
                     internetTV.setVisibility(View.GONE);
                     moviesRecyclerAdapter.clearListOfMovies();
                     movie = "popular";
+                    setTitle("Popular");
                     loaderManager.restartLoader(0, null, this).forceLoad();
                 } else internetTV.setVisibility(View.VISIBLE);
                 break;
@@ -110,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     internetTV.setVisibility(View.GONE);
                     moviesRecyclerAdapter.clearListOfMovies();
                     movie = "top_rated";
+                    setTitle("Top Rated");
                     loaderManager.restartLoader(0, null, this).forceLoad();
 
                 } else internetTV.setVisibility(View.VISIBLE);
@@ -120,16 +117,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     internetTV.setVisibility(View.GONE);
                     moviesRecyclerAdapter.clearListOfMovies();
                     movie = "now_playing";
-                    loaderManager.restartLoader(0, null, this).forceLoad();
-
-                } else internetTV.setVisibility(View.VISIBLE);
-
-                break;
-            case R.id.latest:
-                if (checkInternetConn()) {
-                    internetTV.setVisibility(View.GONE);
-                    moviesRecyclerAdapter.clearListOfMovies();
-                    movie = "latest";
+                    setTitle("Now Playing");
                     loaderManager.restartLoader(0, null, this).forceLoad();
 
                 } else internetTV.setVisibility(View.VISIBLE);
@@ -140,13 +128,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     internetTV.setVisibility(View.GONE);
                     moviesRecyclerAdapter.clearListOfMovies();
                     movie = "upcoming";
+                    setTitle("Upcoming");
                     loaderManager.restartLoader(0, null, this).forceLoad();
                 } else internetTV.setVisibility(View.VISIBLE);
 
                 break;
             case R.id.fav:
                 startActivity(new Intent(this, FavouriteMoviesActivity.class));
-                overridePendingTransition(R.anim.slide_right,R.anim.slide_out_left);
+                overridePendingTransition(R.anim.slide_right, R.anim.slide_out_left);
 
                 break;
         }
@@ -178,7 +167,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         moviesRecyclerAdapter.addMovies(data);
         recyclerView.setAdapter(moviesRecyclerAdapter);
         loadingPb.setVisibility(View.GONE);
-
         Log.d(TAG, "onLoadFinished: load finished");
 
     }
@@ -198,6 +186,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         intent.putExtra("date", movieModel.getMovieYear());
         intent.putExtra("id", movieModel.getMovieId());
         startActivity(intent);
-        overridePendingTransition(R.anim.slide_right,R.anim.slide_out_left);
+        overridePendingTransition(R.anim.slide_right, R.anim.slide_out_left);
     }
 }

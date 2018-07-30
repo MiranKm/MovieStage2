@@ -17,14 +17,14 @@ import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
-public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.VideoViewHolder> {
+public class MovieTrailerAdapter extends RecyclerView.Adapter<MovieTrailerAdapter.VideoViewHolder> {
 
     private Context context;
     private List<VideoModel> videoModelList;
     private onItemClickListener onClickListener;
 
 
-    public TrailersAdapter(Context context, onItemClickListener onClickListener) {
+    public MovieTrailerAdapter(Context context, onItemClickListener onClickListener) {
         this.context = context;
         this.onClickListener = onClickListener;
         videoModelList = new ArrayList<>();

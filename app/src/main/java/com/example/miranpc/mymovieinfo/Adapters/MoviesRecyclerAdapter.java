@@ -66,7 +66,6 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
 
     }
 
-
     public void addMovies(List<MoviesEntity> movies) {
         int posStart = listOfMovies.size();
         if (movies != null)

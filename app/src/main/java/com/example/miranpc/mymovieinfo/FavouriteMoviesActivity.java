@@ -1,6 +1,5 @@
 package com.example.miranpc.mymovieinfo;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.miranpc.mymovieinfo.Adapters.FavouriteMoviesAdapter;
@@ -18,17 +16,14 @@ import com.example.miranpc.mymovieinfo.DataBase.AppExecutors;
 import com.example.miranpc.mymovieinfo.DataBase.MoviesDB;
 import com.example.miranpc.mymovieinfo.DataBase.MoviesEntity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FavouriteMoviesActivity extends AppCompatActivity implements FavouriteMoviesAdapter.onItemClickListener {
 
     MoviesDB moviesDB;
-    int master = 0;
     FavouriteMoviesAdapter adapter;
     RecyclerView recyclerView;
     android.support.v7.widget.Toolbar toolbar;
-    private static final String TAG = "FavouriteMoviesActivity";
 
 
     @Override
@@ -37,7 +32,7 @@ public class FavouriteMoviesActivity extends AppCompatActivity implements Favour
         setContentView(R.layout.activity_favourite_movies);
         moviesDB = MoviesDB.getInstance(this);
 
-        toolbar= findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -84,14 +79,6 @@ public class FavouriteMoviesActivity extends AppCompatActivity implements Favour
                 });
             }
         }).attachToRecyclerView(recyclerView);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        adapter.clearList();
-        adapter.getMovie();
-
     }
 
     @Override

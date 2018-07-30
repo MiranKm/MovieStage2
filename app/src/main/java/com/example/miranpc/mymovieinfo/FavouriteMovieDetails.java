@@ -31,7 +31,6 @@ public class FavouriteMovieDetails extends AppCompatActivity {
 
     private static final String TAG = "FavouriteMovieDetails";
 
-
     TextView titleTv, date, overView, rating;
     ImageView imageView;
     Toolbar toolbar;
@@ -40,10 +39,8 @@ public class FavouriteMovieDetails extends AppCompatActivity {
     RecyclerView reviewsRv;
 
     MoviesDB moviesDB;
-    MoviesEntity moviesEntity;
-
-
     int movieId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +69,9 @@ public class FavouriteMovieDetails extends AppCompatActivity {
 
         movieId = getIntent().getIntExtra("id", 0);
 
-        LiveData<List<MoviesEntity>> listLiveData = MoviesDB.getInstance(this).movieDao().loadAllMovies();
-        listLiveData.observe(this, new Observer<List<MoviesEntity>>() {
+
+        MovieViewModel movieViewModel = new MovieViewModel(getApplication());
+        movieViewModel.getMoviesEntityLiveData().observe(this, new Observer<List<MoviesEntity>>() {
             @Override
             public void onChanged(@Nullable List<MoviesEntity> moviesEntities) {
                 String movieTitle = moviesEntities.get(movieId).getMovieTitle();
