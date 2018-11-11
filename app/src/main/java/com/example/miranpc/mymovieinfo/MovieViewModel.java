@@ -20,12 +20,7 @@ public class MovieViewModel extends AndroidViewModel {
 
         MoviesDB moviesDB= MoviesDB.getInstance(getApplication().getApplicationContext());
         moviesEntityLiveData= moviesDB.movieDao().loadAllMovies();
-
-
-
-
     }
-
     public LiveData<List<MoviesEntity>> getMoviesEntityLiveData() {
         return moviesEntityLiveData;
     }

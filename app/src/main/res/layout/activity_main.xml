@@ -19,8 +19,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            />
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
 
     </android.support.design.widget.AppBarLayout>
@@ -60,7 +59,6 @@
             android:id="@+id/pb"
             android:layout_width="84dp"
             android:layout_height="84dp" />
-
     </LinearLayout>
 
 

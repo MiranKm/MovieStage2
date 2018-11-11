@@ -16,8 +16,6 @@ public class MoviesEntity {
     private String moviePoster;
     public int ID;
 
-
-
     public int getMovieId() {
         return movieId;
     }

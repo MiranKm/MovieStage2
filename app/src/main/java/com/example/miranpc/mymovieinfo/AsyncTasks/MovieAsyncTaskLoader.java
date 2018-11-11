@@ -26,10 +26,12 @@ public class MovieAsyncTaskLoader extends AsyncTaskLoader<List<MoviesEntity>> {
     private static final String TAG = "MovieAsyncTaskLoader";
 
     String movieCat;
+    int page;
 
-    public MovieAsyncTaskLoader(Context context, String movieCat) {
+    public MovieAsyncTaskLoader(Context context, String movieCat, int page) {
         super(context);
         this.movieCat = movieCat;
+        this.page = page;
 
     }
 
@@ -38,7 +40,7 @@ public class MovieAsyncTaskLoader extends AsyncTaskLoader<List<MoviesEntity>> {
     public List<MoviesEntity> loadInBackground() {
         List<MoviesEntity> moviesList = null;
         try {
-            URL urlR = urlMaker(movieCat);
+            URL urlR = urlMaker(movieCat, String.valueOf(page));
 
             String json = fetchData(urlR);
 
@@ -59,13 +61,16 @@ public class MovieAsyncTaskLoader extends AsyncTaskLoader<List<MoviesEntity>> {
                 .appendPath(args[0])
                 .appendQueryParameter("api_key", ApiUtil.API_KEY)
                 .appendQueryParameter("language", ApiUtil.LANG)
+                .appendQueryParameter("page", String.valueOf(args[1]))
                 .build();
 
+        Log.d(TAG, "urlMaker: page = s "+ String.valueOf(args[1]));
+
         URL url = new URL(uri.toString());
+        Log.d(TAG, "urlMaker: link "+ url.toString());
 
         return url;
     }
-    //351286
 
 
     private String fetchData(URL url) throws IOException {
@@ -93,6 +98,7 @@ public class MovieAsyncTaskLoader extends AsyncTaskLoader<List<MoviesEntity>> {
 
         int pageNumber = root.getInt("page");
 
+        Log.d(TAG, "parsMovieJson: page "+ pageNumber);
         JSONArray detailsJsonArr = root.getJSONArray("results");
 
         for (int i = 0; i < detailsJsonArr.length(); i++) {

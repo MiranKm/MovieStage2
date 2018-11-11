@@ -93,8 +93,7 @@ public class FavouriteMoviesActivity extends AppCompatActivity implements Favour
     }
 
     private void setUpAdapter() {
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(manager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new FavouriteMoviesAdapter(this, this);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);

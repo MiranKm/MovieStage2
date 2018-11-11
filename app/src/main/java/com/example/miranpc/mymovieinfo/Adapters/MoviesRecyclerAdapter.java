@@ -22,6 +22,12 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
     private Context context;
     private onClickListener onClickListener;
 
+    public MoviesRecyclerAdapter(Context context, List<MoviesEntity> listOfMovies, MoviesRecyclerAdapter.onClickListener onClickListener) {
+        this.listOfMovies = listOfMovies;
+        this.context = context;
+        this.onClickListener = onClickListener;
+    }
+
     public MoviesRecyclerAdapter(Context context, onClickListener onClickListener) {
         this.context = context;
         this.onClickListener = onClickListener;

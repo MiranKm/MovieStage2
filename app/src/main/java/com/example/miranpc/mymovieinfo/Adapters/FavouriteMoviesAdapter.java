@@ -40,7 +40,6 @@ public class FavouriteMoviesAdapter extends RecyclerView.Adapter<FavouriteMovies
 
         MoviesEntity moviesEntity = listOfMovies.get(position);
         holder.count.setText(String.valueOf(position + 1));
-        //todo check this if you had an error
         holder.title.setText(listOfMovies.get(position).getMovieTitle());
     }
 

@@ -160,7 +160,6 @@ public class DetailsActivity extends AppCompatActivity implements MovieReviewAda
 
 
     public void addToFav(View view) {
-
         if (isFavourite) {
             AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
