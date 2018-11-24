@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private static final String TAG = "MainActivity";
     private static String movie = "popular";
+    public static final String MOVIE="movie";
+    public static final String PAGE="page";
 
 
     android.support.v7.widget.Toolbar toolbar;
@@ -43,8 +45,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     GridLayoutManager gridLayoutManager;
     LoaderManager loaderManager;
     List<MoviesEntity> moviesEntityList;
-    Bundle a, b;
-
+    Bundle bundleStartLoaderData, bundleRestartLoaderData;
 
     public boolean checkInternetConn() {
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -61,10 +62,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        a = new Bundle();
-        b = new Bundle();
-        a.putString("movie", movie);
-        a.putInt("page", page);
+        bundleStartLoaderData = new Bundle();
+        bundleRestartLoaderData = new Bundle();
+
+        bundleStartLoaderData.putString(MOVIE, movie);
+        bundleStartLoaderData.putInt(PAGE, page);
         moviesEntityList = new ArrayList<>();
         gridLayoutManager = new GridLayoutManager(this, 2);
 
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (checkInternetConn()) {
             internetTV.setVisibility(View.GONE);
             loaderManager = getSupportLoaderManager();
-            loaderManager.initLoader(0, a, this).forceLoad();
+            loaderManager.initLoader(0, bundleStartLoaderData, this).forceLoad();
         } else {
             internetTV.setVisibility(View.VISIBLE);
             loadingPb.setVisibility(View.GONE);
@@ -90,10 +92,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 page++;
                 Log.d(TAG, "onLoadMore: " + page);
-                b.putString("movie", movie);
-                b.putInt("page", page);
+                bundleRestartLoaderData.putString(MOVIE, movie);
+                bundleRestartLoaderData.putInt(PAGE, page);
                 Toast.makeText(MainActivity.this, "page = " + page, Toast.LENGTH_SHORT).show();
-                loaderManager.restartLoader(0, b, MainActivity.this).forceLoad();
+                loaderManager.restartLoader(0, bundleRestartLoaderData, MainActivity.this).forceLoad();
 
             }
         });
@@ -111,38 +113,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         LoaderManager loaderManager = getSupportLoaderManager();
-
         switch (item.getItemId()) {
             case R.id.popular:
-                if (checkInternetConn()) {
-                    LoadData(loaderManager, "popular", "Popular", 1);
-                } else internetTV.setVisibility(View.VISIBLE);
+                LoadData(loaderManager, "popular", "Popular", 1);
                 break;
-
             case R.id.top_rated:
-                if (checkInternetConn()) {
-                    LoadData(loaderManager, "top_rated", "Top Rated", 1);
-
-                } else internetTV.setVisibility(View.VISIBLE);
-
+                LoadData(loaderManager, "top_rated", "Top Rated", 1);
                 break;
             case R.id.now_playing:
-                if (checkInternetConn()) {
-                    LoadData(loaderManager, "now_playing", "Now Playing", 1);
-
-                } else internetTV.setVisibility(View.VISIBLE);
-
+                LoadData(loaderManager, "now_playing", "Now Playing", 1);
                 break;
             case R.id.upcoming:
-                if (checkInternetConn()) {
-                    LoadData(loaderManager, "upcoming", "Upcoming", 1);
-                } else internetTV.setVisibility(View.VISIBLE);
-
+                LoadData(loaderManager, "upcoming", "Upcoming", 1);
                 break;
             case R.id.fav:
                 startActivity(new Intent(this, FavouriteMoviesActivity.class));
                 overridePendingTransition(R.anim.slide_right, R.anim.slide_out_left);
-
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -150,14 +136,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     private void LoadData(LoaderManager loaderManager, String movieCAt, String title, int pageCount) {
-        internetTV.setVisibility(View.GONE);
-        moviesRecyclerAdapter.clearListOfMovies();
-        movie = movieCAt;
-        setTitle(title);
-        b.putString("movie", movieCAt);
-        b.putInt("page", page);
-        page = pageCount;
-        loaderManager.restartLoader(0, b, this).forceLoad();
+        if (checkInternetConn()) {
+            internetTV.setVisibility(View.GONE);
+            moviesRecyclerAdapter.clearListOfMovies();
+            movie = movieCAt;
+            setTitle(title);
+            bundleRestartLoaderData.putString(MOVIE, movieCAt);
+            bundleRestartLoaderData.putInt(PAGE, page);
+            page = pageCount;
+            loaderManager.restartLoader(0, bundleRestartLoaderData, this).forceLoad();
+        } else internetTV.setVisibility(View.VISIBLE);
     }
 
     private void setUpRecyclerAdapter() {
@@ -165,8 +153,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(moviesRecyclerAdapter);
-
-
     }
 
 
@@ -180,7 +166,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(@NonNull Loader<List<MoviesEntity>> loader, List<MoviesEntity> data) {
-
         moviesEntityList.addAll(data);
         moviesRecyclerAdapter.notifyItemRangeInserted(moviesRecyclerAdapter.getItemCount(), data.size() - 1);
         loadingPb.setVisibility(View.GONE);
@@ -196,12 +181,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onItemClickListener(MoviesEntity movieModel) {
         Intent intent = new Intent(this, DetailsActivity.class);
-        intent.putExtra("name", movieModel.getMovieTitle());
+        intent.putExtra(MOVIE, movieModel);
+        /*intent.putExtra("name", movieModel.getMovieTitle());
         intent.putExtra("image", movieModel.getMovieBackDrop());
         intent.putExtra("overview", movieModel.getMovieOverView());
         intent.putExtra("rating", movieModel.getMovieRating());
         intent.putExtra("date", movieModel.getMovieYear());
-        intent.putExtra("id", movieModel.getMovieId());
+        intent.putExtra("id", movieModel.getMovieId());*/
         startActivity(intent);
         overridePendingTransition(R.anim.slide_right, R.anim.slide_out_left);
     }

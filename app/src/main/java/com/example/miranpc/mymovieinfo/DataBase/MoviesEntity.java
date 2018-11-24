@@ -2,9 +2,11 @@ package com.example.miranpc.mymovieinfo.DataBase;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 @Entity
-public class MoviesEntity {
+public class MoviesEntity implements Parcelable {
 
     @PrimaryKey
     private int movieId;
@@ -15,6 +17,29 @@ public class MoviesEntity {
     private String movieBackDrop;
     private String moviePoster;
     public int ID;
+
+    protected MoviesEntity(Parcel in) {
+        movieId = in.readInt();
+        movieTitle = in.readString();
+        movieRating = in.readString();
+        movieYear = in.readString();
+        movieOverView = in.readString();
+        movieBackDrop = in.readString();
+        moviePoster = in.readString();
+        ID = in.readInt();
+    }
+
+    public static final Creator<MoviesEntity> CREATOR = new Creator<MoviesEntity>() {
+        @Override
+        public MoviesEntity createFromParcel(Parcel in) {
+            return new MoviesEntity(in);
+        }
+
+        @Override
+        public MoviesEntity[] newArray(int size) {
+            return new MoviesEntity[size];
+        }
+    };
 
     public int getMovieId() {
         return movieId;
@@ -73,7 +98,6 @@ public class MoviesEntity {
     }
 
 
-
     public MoviesEntity(int movieId, String movieTitle, String movieRating, String movieYear, String movieOverView, String movieBackDrop, String moviePoster) {
 
         this.movieId = movieId;
@@ -86,4 +110,21 @@ public class MoviesEntity {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(movieId);
+        dest.writeString(movieTitle);
+        dest.writeString(movieRating);
+        dest.writeString(movieYear);
+        dest.writeString(movieOverView);
+        dest.writeString(movieBackDrop);
+        dest.writeString(moviePoster);
+        dest.writeInt(ID);
+    }
 }

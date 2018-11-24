@@ -100,7 +100,7 @@ public class MovieAsyncTaskLoader extends AsyncTaskLoader<List<MoviesEntity>> {
 
         Log.d(TAG, "parsMovieJson: page "+ pageNumber);
         JSONArray detailsJsonArr = root.getJSONArray("results");
-
+        Log.d(TAG, "parser: title "+ detailsJsonArr.length());
         for (int i = 0; i < detailsJsonArr.length(); i++) {
 
             Log.d(TAG, "parsMovieJson: i s loop " + i);

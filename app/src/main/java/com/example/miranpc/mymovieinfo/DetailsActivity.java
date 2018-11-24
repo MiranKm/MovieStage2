@@ -83,16 +83,17 @@ public class DetailsActivity extends AppCompatActivity implements MovieReviewAda
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        MoviesEntity moviesEntityFromIntent = getIntent().getParcelableExtra(MainActivity.MOVIE);
         CollapsingToolbarLayout collapsingToolbar = findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(getIntent().getStringExtra("name"));
+        collapsingToolbar.setTitle(moviesEntity.getMovieTitle());
 
 
-        String movieTitle = getIntent().getStringExtra("name");
-        String moviePoster = getIntent().getStringExtra("image");
-        String movieRating = getIntent().getStringExtra("rating");
-        String movieDate = getIntent().getStringExtra("date");
-        String movieOverView = getIntent().getStringExtra("overview");
-        movieId = getIntent().getIntExtra("id", 0);
+        String movieTitle = moviesEntityFromIntent.getMovieTitle();
+        String moviePoster = moviesEntityFromIntent.getMoviePoster();
+        String movieRating = moviesEntityFromIntent.getMovieRating();
+        String movieDate = moviesEntityFromIntent.getMovieYear();
+        String movieOverView = moviesEntityFromIntent.getMovieOverView();
+        movieId = moviesEntityFromIntent.getMovieId();
 
         settingData(movieTitle, moviePoster, movieRating, movieDate, movieOverView);
 
