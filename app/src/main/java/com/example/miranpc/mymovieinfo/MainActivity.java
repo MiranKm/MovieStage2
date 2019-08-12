@@ -166,10 +166,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(@NonNull Loader<List<MoviesEntity>> loader, List<MoviesEntity> data) {
-        moviesEntityList.addAll(data);
-        moviesRecyclerAdapter.notifyItemRangeInserted(moviesRecyclerAdapter.getItemCount(), data.size() - 1);
-        loadingPb.setVisibility(View.GONE);
-        Log.d(TAG, "onLoadFinished: load finished");
+        if (data != null) {
+            moviesEntityList.addAll(data);
+            moviesRecyclerAdapter.notifyItemRangeInserted(moviesRecyclerAdapter.getItemCount(), data.size() - 1);
+            Log.d(TAG, "onLoadFinished: load finished");
+        }
+            loadingPb.setVisibility(View.GONE);
 
     }
 

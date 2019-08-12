@@ -29,9 +29,10 @@ import com.example.miranpc.mymovieinfo.AsyncTasks.ReviewAsyncTaskLoader;
 import com.example.miranpc.mymovieinfo.AsyncTasks.VideoAsyncTaskLoader;
 import com.example.miranpc.mymovieinfo.DataBase.AppExecutors;
 import com.example.miranpc.mymovieinfo.DataBase.MoviesDB;
-import com.example.miranpc.mymovieinfo.model.MoviesEntity;
 import com.example.miranpc.mymovieinfo.model.MovieReviewModel;
+import com.example.miranpc.mymovieinfo.model.MoviesEntity;
 import com.example.miranpc.mymovieinfo.model.VideoModel;
+import com.r0adkll.slidr.Slidr;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -81,7 +82,10 @@ public class DetailsActivity extends AppCompatActivity implements MovieReviewAda
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         MoviesEntity moviesEntityFromIntent = getIntent().getParcelableExtra(MainActivity.MOVIE);
         CollapsingToolbarLayout collapsingToolbar = findViewById(R.id.collapsing_toolbar);
@@ -124,6 +128,7 @@ public class DetailsActivity extends AppCompatActivity implements MovieReviewAda
 
         reviewsRecyclerAdapter();
         trailersRecyclerAdapter();
+        Slidr.attach(this);
 
 
     }
@@ -207,6 +212,16 @@ public class DetailsActivity extends AppCompatActivity implements MovieReviewAda
 
     }
 
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        Toast.makeText(this, "HEYYYYY", Toast.LENGTH_SHORT).show();
+        finish();
+//        overridePendingTransition(R.anim.slide_left, R.anim.slide_out_right);
+        // or call onBackPressed()
+        return true;
+    }
+
     private LoaderManager.LoaderCallbacks<List<VideoModel>> videoLoader = new LoaderManager.LoaderCallbacks<List<VideoModel>>() {
         @NonNull
         @Override
@@ -259,11 +274,12 @@ public class DetailsActivity extends AppCompatActivity implements MovieReviewAda
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                overridePendingTransition(R.anim.slide_left, R.anim.slide_out_right);
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            overridePendingTransition(R.anim.slide_left, R.anim.slide_out_right);
+//            NavUtils.navigateUpFromSameTask(this);
+//                overridePendingTransition(R.anim.slide_left, R.anim.slide_out_right);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
