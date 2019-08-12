@@ -1,6 +1,5 @@
 package com.example.miranpc.mymovieinfo;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -19,9 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
-import com.example.miranpc.mymovieinfo.DataBase.AppExecutors;
 import com.example.miranpc.mymovieinfo.DataBase.MoviesDB;
-import com.example.miranpc.mymovieinfo.DataBase.MoviesEntity;
+import com.example.miranpc.mymovieinfo.model.MoviesEntity;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -74,11 +72,14 @@ public class FavouriteMovieDetails extends AppCompatActivity {
         movieViewModel.getMoviesEntityLiveData().observe(this, new Observer<List<MoviesEntity>>() {
             @Override
             public void onChanged(@Nullable List<MoviesEntity> moviesEntities) {
+
                 String movieTitle = moviesEntities.get(movieId).getMovieTitle();
                 String moviePoster = moviesEntities.get(movieId).getMoviePoster();
                 String movieRating = moviesEntities.get(movieId).getMovieRating();
-                final String movieDate = moviesEntities.get(movieId).getMovieYear();
+                String movieDate = moviesEntities.get(movieId).getMovieYear();
                 String movieOverView = moviesEntities.get(movieId).getMovieOverView();
+
+
                 settingDatas(movieTitle, moviePoster, movieRating, movieDate, movieOverView);
             }
         });

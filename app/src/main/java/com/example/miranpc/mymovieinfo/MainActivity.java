@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 import com.example.miranpc.mymovieinfo.Adapters.MoviesRecyclerAdapter;
 import com.example.miranpc.mymovieinfo.AsyncTasks.MovieAsyncTaskLoader;
-import com.example.miranpc.mymovieinfo.DataBase.MoviesEntity;
+import com.example.miranpc.mymovieinfo.model.MoviesEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -178,16 +178,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
+    // TODO: 12/20/2018  look over here you ...
     @Override
     public void onItemClickListener(MoviesEntity movieModel) {
         Intent intent = new Intent(this, DetailsActivity.class);
         intent.putExtra(MOVIE, movieModel);
-        /*intent.putExtra("name", movieModel.getMovieTitle());
-        intent.putExtra("image", movieModel.getMovieBackDrop());
-        intent.putExtra("overview", movieModel.getMovieOverView());
-        intent.putExtra("rating", movieModel.getMovieRating());
-        intent.putExtra("date", movieModel.getMovieYear());
-        intent.putExtra("id", movieModel.getMovieId());*/
         startActivity(intent);
         overridePendingTransition(R.anim.slide_right, R.anim.slide_out_left);
     }

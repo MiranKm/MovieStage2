@@ -1,6 +1,7 @@
 package com.example.miranpc.mymovieinfo.model;
 
 public class MovieReviewModel extends Throwable {
+
     public String getAuthor() {
         return author;
     }

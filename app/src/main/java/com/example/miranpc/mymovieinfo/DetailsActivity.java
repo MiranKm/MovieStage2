@@ -15,13 +15,13 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.example.miranpc.mymovieinfo.Adapters.MovieReviewAdapter;
 import com.example.miranpc.mymovieinfo.Adapters.MovieTrailerAdapter;
@@ -29,7 +29,7 @@ import com.example.miranpc.mymovieinfo.AsyncTasks.ReviewAsyncTaskLoader;
 import com.example.miranpc.mymovieinfo.AsyncTasks.VideoAsyncTaskLoader;
 import com.example.miranpc.mymovieinfo.DataBase.AppExecutors;
 import com.example.miranpc.mymovieinfo.DataBase.MoviesDB;
-import com.example.miranpc.mymovieinfo.DataBase.MoviesEntity;
+import com.example.miranpc.mymovieinfo.model.MoviesEntity;
 import com.example.miranpc.mymovieinfo.model.MovieReviewModel;
 import com.example.miranpc.mymovieinfo.model.VideoModel;
 import com.squareup.picasso.Picasso;
@@ -78,14 +78,13 @@ public class DetailsActivity extends AppCompatActivity implements MovieReviewAda
         naTrailers = findViewById(R.id.na_trailer);
         naReviews = findViewById(R.id.na_reviews);
 
-        final android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         MoviesEntity moviesEntityFromIntent = getIntent().getParcelableExtra(MainActivity.MOVIE);
         CollapsingToolbarLayout collapsingToolbar = findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(moviesEntity.getMovieTitle());
 
 
         String movieTitle = moviesEntityFromIntent.getMovieTitle();
@@ -98,6 +97,7 @@ public class DetailsActivity extends AppCompatActivity implements MovieReviewAda
         settingData(movieTitle, moviePoster, movieRating, movieDate, movieOverView);
 
         moviesEntity = new MoviesEntity(movieId, movieTitle, movieRating, movieDate, movieOverView, null, moviePoster);
+        collapsingToolbar.setTitle(movieTitle);
 
 
         AppExecutors.getInstance().diskIO().execute(new Runnable() {

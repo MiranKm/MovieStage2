@@ -6,7 +6,7 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
 import com.example.miranpc.mymovieinfo.DataBase.MoviesDB;
-import com.example.miranpc.mymovieinfo.DataBase.MoviesEntity;
+import com.example.miranpc.mymovieinfo.model.MoviesEntity;
 
 import java.util.List;
 
@@ -14,13 +14,17 @@ public class MovieViewModel extends AndroidViewModel {
 
 
     private LiveData<List<MoviesEntity>> moviesEntityLiveData;
+    private MoviesEntity moviesEntity;
+
 
     public MovieViewModel(@NonNull Application application) {
         super(application);
 
-        MoviesDB moviesDB= MoviesDB.getInstance(getApplication().getApplicationContext());
-        moviesEntityLiveData= moviesDB.movieDao().loadAllMovies();
+        MoviesDB moviesDB = MoviesDB.getInstance(getApplication().getApplicationContext());
+        moviesEntityLiveData = moviesDB.movieDao().loadAllMovies();
     }
+
+
     public LiveData<List<MoviesEntity>> getMoviesEntityLiveData() {
         return moviesEntityLiveData;
     }

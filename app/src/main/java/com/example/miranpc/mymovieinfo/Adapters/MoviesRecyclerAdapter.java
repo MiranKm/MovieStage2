@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.miranpc.mymovieinfo.DataBase.MoviesEntity;
+import com.example.miranpc.mymovieinfo.model.MoviesEntity;
 import com.example.miranpc.mymovieinfo.R;
 import com.squareup.picasso.Picasso;
 

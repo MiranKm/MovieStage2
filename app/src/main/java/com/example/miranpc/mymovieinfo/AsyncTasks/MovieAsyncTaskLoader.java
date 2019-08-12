@@ -6,7 +6,7 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
 import com.example.miranpc.mymovieinfo.ApiUtil;
-import com.example.miranpc.mymovieinfo.DataBase.MoviesEntity;
+import com.example.miranpc.mymovieinfo.model.MoviesEntity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -109,6 +109,7 @@ public class MovieAsyncTaskLoader extends AsyncTaskLoader<List<MoviesEntity>> {
 
             String movieTitle = detailsJsonObj.getString("title");
             int movieId = detailsJsonObj.getInt("id");
+
             String movieBackDrop = "http://image.tmdb.org/t/p/w500/" + detailsJsonObj.getString("poster_path");
             Log.d(TAG, "parsMovieJson: poster path " + movieBackDrop);
             String movieOverView = detailsJsonObj.getString("overview");

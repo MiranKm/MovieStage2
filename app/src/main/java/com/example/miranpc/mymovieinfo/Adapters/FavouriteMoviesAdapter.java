@@ -3,14 +3,12 @@ package com.example.miranpc.mymovieinfo.Adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.miranpc.mymovieinfo.DataBase.MoviesEntity;
-import com.example.miranpc.mymovieinfo.MovieViewModel;
+import com.example.miranpc.mymovieinfo.model.MoviesEntity;
 import com.example.miranpc.mymovieinfo.R;
 
 import java.util.ArrayList;

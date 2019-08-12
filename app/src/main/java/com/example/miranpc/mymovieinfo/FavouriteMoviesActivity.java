@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import com.example.miranpc.mymovieinfo.Adapters.FavouriteMoviesAdapter;
 import com.example.miranpc.mymovieinfo.DataBase.AppExecutors;
 import com.example.miranpc.mymovieinfo.DataBase.MoviesDB;
-import com.example.miranpc.mymovieinfo.DataBase.MoviesEntity;
+import com.example.miranpc.mymovieinfo.model.MoviesEntity;
 
 import java.util.List;
 
@@ -100,6 +100,7 @@ public class FavouriteMoviesActivity extends AppCompatActivity implements Favour
     }
 
 
+    // TODO: 12/20/2018 this can be definitely improved by a lot instead of passing the id pass the damn item it self
     @Override
     public void onItemClickListener(int position) {
         Intent intent = new Intent(this, FavouriteMovieDetails.class);

@@ -7,6 +7,8 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
+import com.example.miranpc.mymovieinfo.model.MoviesEntity;
+
 import java.util.List;
 
 @Dao
@@ -25,3 +27,5 @@ public interface MovieDao {
     void deleteMovie(MoviesEntity moviesEntity);
 
 }
+
+
